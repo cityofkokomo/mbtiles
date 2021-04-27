@@ -1,0 +1,41 @@
+To make Maperitive MBTiles work or Update Cube Tiles:
+
+1. Install and Open Maperitive.
+2. Find and set a map that you wish to use, it defaults to OSM Bright, but anything will work.
+3. Zoom to the location you want, the visible area is what will be rendered.
+4. In the command line on Maperitive, type [generate-mbtiles minzoom=0 maxzoom=19]
+5. Wait, this will take a few hours, or even overnight. 
+	You can do a smaller zoom (smaller "maxzoom" number),
+	but the images will be at a much lower quality as you get closer in Cube.
+6. When complete, upload the data to github repository:
+	cd to:
+		 /c/Maperitive-latest/Maperitive/Tiles
+	type [git init -b main]
+	type [git add .]
+	type [git commit -m "commitName"]
+	type [git remote add origin https://github.com/cityofkokomo/HowardCoMbtiles.git]
+	type [git remote -v] to verify
+	type [git push origin main -f] (with force!)
+
+7. When complete, clone the github repository into the server
+	cd to:
+		/opt/maps
+	delete prior repository [sudo rm HowardCoMbtiles -r]
+	clone new repository [sudo git clone https://github.com/cityofkokomo/HowardCoMbtiles.git]
+	cd to:
+		/opt/maps/HowardCoMbtiles
+8. When complete, run docker:
+	docker run --rm -it -v$(pwd):/data -p 10001:80 maptiler/tileserver-gl
+9. If docker was previously running, this will not work. 
+	-Run: docker ps
+	-Once you see the id of the currently running docker, use the following to stop it:
+		docker stop [insert docker id]
+10. Once you have done this, return to step 8.
+
+
+
+It is common to see the following error:
+
+	"WARN: MBTiles not in "openmaptiles" format. Serving raw data only..."
+
+This is okay and will not effect the server.
